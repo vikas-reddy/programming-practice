@@ -70,54 +70,17 @@ class BST {
       }
     }
 
-    void recursiveLevelOrder(int low, int high) {
-      _levelOrderTraversal(root, low, high);
-      cout << endl;
-    }
-
-    void levelOrder(int low, int high) {
-      if (!root) {
+    void recursiveLeveWiseSum(node *n, int level, int currLevel, int *sum) {
+      if (n == NULL || currLevel > level) {
         return;
       }
-      queue<node*> q;
-      int level = 1;
-      bool endOfLevel = false;
-      node *marker = new node(123), *n;
-
-      q.push(root);
-      q.push(marker);
-      while (!q.empty()) {
-        n = q.front();
-        q.pop();
-
-        if (n == marker)
-          break;
-        if (level > high)
-          break;
-
-        if (level >= low) {
-          cout << n->data << " ";
-        }
-
-        if (q.front() == marker) {
-          q.pop();
-          level++;
-          endOfLevel = true;
-          if (level > low) {
-            cout << " - " << level - 1 << endl;
-          }
-        }
-        if (n->left)
-          q.push(n->left);
-        if (n->right)
-          q.push(n->right);
-
-        if (endOfLevel) {
-          q.push(marker);
-          endOfLevel = false;
-        }
+      recursiveLeveWiseSum(n->left, level, currLevel+1, sum);
+      recursiveLeveWiseSum(n->right, level, currLevel+1, sum);
+      if (currLevel == level) {
+        *sum = *sum + n->data;
       }
     }
+
   private:
     void _inOrder(node *n) {
       if(!n)
@@ -134,17 +97,6 @@ class BST {
       _preOrder(n->left);
       _preOrder(n->right);
     }
-
-    void _levelOrderTraversal(node *n, int low, int high) {
-      if (!n) {
-        return;
-      }
-      if (low <= 1 && high >= 1) {
-        cout << n->data << " ";
-      }
-      _levelOrderTraversal(n->left, low-1, high-1);
-      _levelOrderTraversal(n->right, low-1, high-1);
-    }
 };
 
 int main() {
@@ -159,7 +111,10 @@ int main() {
   tree->inOrder();
   tree->preOrder();
 
-  /* tree->recursiveLevelOrder(0, 5); */
-  tree->levelOrder(1, 3);
+  for (int i=0; i < 6; i++) {
+    int sum = 0;
+    tree->recursiveLeveWiseSum(tree->root, i, 1, &sum);
+    cout << i << " " << sum << endl;
+  }
   return 0;
 }

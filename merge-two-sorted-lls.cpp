@@ -34,7 +34,8 @@ class llist {
 
     void print() {
       if (start == NULL) {
-        return; }
+        return;
+      }
 
       for (node *p = start; p; p = p->next) {
         cout << p->data << " ";
