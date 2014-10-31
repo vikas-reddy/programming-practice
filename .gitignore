@@ -29,3 +29,6 @@
 
 # Java executables
 *.class
+
+# ViM swap files
+*.swp
