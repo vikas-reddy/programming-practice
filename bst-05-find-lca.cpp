@@ -1,6 +1,5 @@
 #include <iostream>
 #include <stdlib.h>
-#include <iterator>
 #include <queue>
 #include <list>
 #include "mylib.h"
@@ -73,82 +72,37 @@ class BST {
       }
     }
 
-    void dllOfLeaves(node *n, node **dll) {
+    node *getLcaRecursive(node *n, int a, int b) {
       if (n == NULL) {
-        return;
+        return NULL;
       }
-      dllOfLeaves(n->right, dll);
 
-      // do not recurse into children of leaf nodes. Instead, insert them into
-      // the doubly-linked list
-      if (n->left == NULL && n->right == NULL) {
-        n->right = *dll;
-        if (*dll) {
-          (*dll)->left = n;
-        }
-        *dll = n;
+      if (a < n->data && b < n->data) {
+        return getLcaRecursive(n->left, a, b);
       }
-      dllOfLeaves(n->left, dll);
+      else if (a > n->data && b > n->data) {
+        return getLcaRecursive(n->right, a, b);
+      }
+      return n;
     }
 
-    bool isDllLeaf(node *n) {
-      return ( (!n->left || (n->left && n->left->right == n)) &&
-               (!n->right || (n->right && n->right->left == n)) );
-    }
-
-    void breakDll(node *n) {
-      node *dll = NULL;
-
-      // get the dll first, and then set the pointers of the leaves right
-      getDll(n, &dll);
-
-      node *a = dll, *b = NULL;
-      while (a->right) {
-        b = a->right;
-        a->left = NULL;
-        a->right = NULL;
-        a = b;
-      }
-      if (b) {
-        b->left = NULL;
-        b->right = NULL;
-      }
-    }
-
-    void getDll(node *n, node **dll) {
-      if (n == NULL) {
-        return;
-      }
-      if (*dll == NULL) {
-        getDll(n->left, dll);
-        if (isDllLeaf(n)) {
-          *dll = n;
-          return;
-        }
-        getDll(n->right, dll);
-      }
-    }
-
-    void printDll(node *n) {
-      if (n == NULL) {
-        return;
-      }
+    node *getLca(int a, int b) {
+      node *n = root;
       while (n) {
-        cout << n->data << " ";
-        n = n->right;
+        if (a < n->data && n->data < b) {
+          return n;
+        }
+        if (a == n->data || n->data == b) {
+          return n;
+        }
+        if (a < n->data && b < n->data) {
+          n = n->left;
+        }
+        else if (a > n->data && b > n->data) {
+          n = n->right;
+        }
       }
-      cout << endl;
-    }
-
-    int depthWithDll(node *n) {
-      if (n == NULL) {
-        return 0;
-      }
-      if (isDllLeaf(n)) {
-        return 1;
-      }
-      int dleft = depthWithDll(n->left), dright = depthWithDll(n->right);
-      return ( ((dleft > dright) ? dleft : dright) + 1 );
+      return n;
     }
   private:
 
@@ -195,13 +149,13 @@ int main() {
 
   tree->inOrder();
 
-  node *dll = NULL;
-  tree->dllOfLeaves(tree->root, &dll);
-  tree->printDll(dll);
-
-  cout << "depth with dll: " << tree->depthWithDll(tree->root) << endl;
-  tree->breakDll(tree->root);
-  tree->inOrder();
+  node *lca = tree->getLcaRecursive(tree->root, 56, 81);
+  if (lca) {
+    cout << lca->data << endl;
+  }
+  else {
+    cout << "no lca" << endl;
+  }
 
   return 0;
 }
