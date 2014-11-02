@@ -77,6 +77,29 @@ struct node *buildTree(struct node *inOrder[], struct node *preOrder[], int f, i
   return r;
 }
 
+struct node *buildTree2(struct node *inOrder[], struct node *preOrder[],
+                        int *currRootIdx, int f, int l) {
+  if (f < 0 || l >= 10 || f > l) {
+    return NULL;
+  }
+  // Split the inOrder into two calls at root; recurse into two subtrees and
+  // create the tree rooted at root
+  int rootIdx;
+  for (rootIdx = f; rootIdx <= l; rootIdx++) {
+    if (inOrder[rootIdx]->data == preOrder[*currRootIdx]->data) {
+      break;
+    }
+  }
+  /* printf("(%d, %d) : %d, %d\n", f, l, rootIdx, *currRootIdx); */
+  // seek to the next root in the preOrder array
+  (*currRootIdx)++;
+
+  struct node *r = inOrder[rootIdx];
+  r->left = buildTree2(inOrder, preOrder, currRootIdx, f, rootIdx - 1);
+  r->right = buildTree2(inOrder, preOrder, currRootIdx, rootIdx + 1, l);
+  return r;
+}
+
 struct node *createTree() {
   struct node *root = newNode(60);
   root->left = newNode(32);
@@ -111,7 +134,8 @@ int main(int argc, const char *argv[])
     preOrder[i] = newNode(preOrderElements[i]);
   }
 
-  struct node *root2 = buildTree(inOrder, preOrder, 0, 10 - 1);
+  int currRootIdx = 0;
+  struct node *root2 = buildTree2(inOrder, preOrder, &currRootIdx, 0, 10 - 1);
   inOrderT(root2); printf("\n");
   preOrderT(root2); printf("\n");
   return 0;
