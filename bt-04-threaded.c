@@ -36,12 +36,24 @@ void inOrderT(struct node *root) {
 }
 
 void printThreadedTree(struct node *root) {
+  if (root == NULL) {
+    return;
+  }
+
+  while (root->left) {
+    root = root->left;
+  }
   while (root) {
-    while (root->left) {
-      root = root->left;
-    }
     printf("%d ", root->data);
-    root = root->right;
+    if (root->isThreaded) {
+      root = root->right;
+    }
+    else {
+      root = root->right;
+      while (root->left) {
+        root = root->left;
+      }
+    }
   }
   printf("\n");
 }
@@ -85,9 +97,10 @@ int main(int argc, const char *argv[])
 
   struct node *pred = NULL;
   makeThreaded(root, &pred);
-  printf("%d:%d\n", root->left->left->right->right->data, root->left->left->right->isThreaded);
-  printf("%d:%d\n", root->left->right->right->data, root->left->right->isThreaded);
-  printf("%d:%d\n", root->right->right->left->right->right->data, root->right->right->left->right->isThreaded);
+  printThreadedTree(root);
+  /* printf("%d:%d\n", root->left->left->right->right->data, root->left->left->right->isThreaded); */
+  /* printf("%d:%d\n", root->left->right->right->data, root->left->right->isThreaded); */
+  /* printf("%d:%d\n", root->right->right->left->right->right->data, root->right->right->left->right->isThreaded); */
   /* printThreadedTree(root); */
   return 0;
 }
