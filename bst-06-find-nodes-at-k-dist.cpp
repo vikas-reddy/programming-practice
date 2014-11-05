@@ -135,6 +135,7 @@ class BST {
         }
         return dr + 1;
       }
+      return -1;
     }
   private:
     void _inOrder(node *n) {
