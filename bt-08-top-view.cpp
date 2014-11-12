@@ -1,8 +1,6 @@
 #include<stdio.h>
 #include<iostream>
 #include<stdlib.h>
-#include<map>
-#include<iterator>
 
 using namespace std;
 
@@ -46,7 +44,6 @@ struct node *createTree() {
 int main(int argc, const char *argv[])
 {
   struct node *root = createTree();
-  map<struct node*, int[2]> m;
 
   inOrder(root, 1, 0);
   printf("\n");
