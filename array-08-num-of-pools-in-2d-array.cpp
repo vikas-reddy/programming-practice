@@ -8,11 +8,9 @@ class coords {
   public:
     int x;
     int y;
-    int color;
     coords(int a, int b) {
       x = a;
       y = b;
-      color = 0; // unvisited
     }
 };
 
@@ -22,7 +20,8 @@ void print2D(int arr[][5]) {
       printf("%d ", arr[i][j]);
     }
     printf("\n");
-  } printf("\n");
+  }
+  printf("\n");
 }
 
 bool isBoundary(int x, int y) {
