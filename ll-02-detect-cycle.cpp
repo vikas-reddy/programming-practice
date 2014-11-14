@@ -16,6 +16,9 @@ class node {
     }
 };
 
+/*
+ * Let's make the loop break at the "end"
+ */
 void removeCycleBasic(node *root) {
   if (!root) {
     return;
@@ -38,6 +41,11 @@ void removeCycleBasic(node *root) {
   }
 }
 
+/*
+ * Calculates the distance from root for all the nodes, and increments a
+ * counter. If it finds that the computed distance is less than the counter,
+ * then there is a cycle.
+ */
 bool hasCycleBasic(node *root) {
   if (!root) {
     return false;
@@ -45,12 +53,15 @@ bool hasCycleBasic(node *root) {
   int i = 1, j;
   node *n = root->next, *p;
   while (n) {
+    // start at root and compute distance to reach n
     p = root;
     j = 0;
     while (p != n) {
       p = p->next;
       j++;
     }
+
+    // if distance is less than counter, then there is a cycle
     if (j < i) {
       cout << "cycle at " << n->data << endl;
       return true;
@@ -122,8 +133,8 @@ int main(int argc, const char *argv[]) {
   /*   cout << n->data << endl; */
   /* } */
   /* cout << hasCycleBasic(root) << endl; */
-  /* removeCycleBasic(root); */
-  cycleDetectionFloyd(root);
+  removeCycleBasic(root);
+  /* cycleDetectionFloyd(root); */
   printList(root);
   return 0;
 }
