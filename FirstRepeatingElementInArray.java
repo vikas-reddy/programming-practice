@@ -1,23 +1,26 @@
+import java.util.*;
+
 public class FirstRepeatingElementInArray {
    public static void main(String[] args) {
-      meth();
-   }
-
-   public static void meth()
-   {
       int[] arr = {10, 5, 3, 4, 3, 5, 6};
-      //Output: 5 [5 is the first element that repeats]
-      int min=0;
-      for(int i=arr.length-1;i>min;i--)
-      {
-         if(arr[min]==arr[i])
-         {
-            System.out.println("Repeating element is:\t"+arr[min]);
+      // int[] arr = {6, 10, 5, 4, 9, 120, 4, 6, 10};
+      int minIdx = -1;
+      HashSet<Integer> set = new HashSet<>();
+
+      for (int i = arr.length - 1; i >= 0; i--) {
+         if (set.contains(arr[i])) {
+            minIdx = i;
          }
-         else
-         {
-            min++;
+         else {
+            set.add(arr[i]);
          }
+      }
+
+      if (minIdx != -1) {
+         System.out.println("Min index of first repeating element: " + minIdx);
+      }
+      else {
+         System.out.println("No repeating elements found");
       }
    }
 }
