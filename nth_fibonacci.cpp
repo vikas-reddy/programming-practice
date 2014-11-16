@@ -3,8 +3,9 @@
 
 using namespace std;
 
+// compute it only if it's not in the "memory"
+// DP with memoization or top-down approach
 unsigned long long int fib(unsigned long long int n, unsigned long long int *mem, unsigned int *count) {
-  // compute it only if it's not in the "memory"
   if (mem[n] == 0) {
     (*count)++;
     if (n == 0 || n == 1) {
