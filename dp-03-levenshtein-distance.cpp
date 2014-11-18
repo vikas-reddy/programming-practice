@@ -59,7 +59,7 @@ int editDistance(char str1[], char str2[], int len1, int len2) {
   for (int i = 1; i < len1 + 1; i++) {
     for (int j = 1; j < len2 + 1; j++) {
       // Replace operation if needed
-      a = (str1[i] != str2[j]) + distances[i - 1][j - 1];
+      a = (str1[i - 1] != str2[j - 1]) + distances[i - 1][j - 1];
 
       // Delete operation
       b = 1 + distances[i - 1][j];
@@ -72,6 +72,18 @@ int editDistance(char str1[], char str2[], int len1, int len2) {
   }
 
   return distances[len1][len2];
+}
+
+// Recursive solution. Takes exponential time
+int editDistanceRecursive(char str1[], char str2[], int len1, int len2) {
+  if (len1 == 0) return len2;
+  if (len2 == 0) return len2;
+
+  return min(
+        editDistanceRecursive(str1, str2, len1 - 1, len2) + 1, // delete operation
+        editDistanceRecursive(str1, str2, len1, len2 - 1) + 1, // insert operation
+        editDistanceRecursive(str1, str2, len1 - 1, len2 - 1) + (str1[len1 - 1] != str2[len2 - 1]) // replace if necessary
+      );
 }
 
 int main(int argc, char *argv[])
@@ -87,6 +99,12 @@ int main(int argc, char *argv[])
 
   cout << str1 << " " << len1 << endl;
   cout << str2 << " " << len2 << endl;
+
+  /* Recursive */
+  /* cout << "Min distance: " << editDistanceRecursive(str1, str2, len1, len2) << endl; */
+  /* return 0; */
+
+  /* Dynamic Programming */
   // initializing the array
   distances = new int*[len1 + 1];
   for (int i = 0; i < len1 + 1; i++) {
@@ -95,6 +113,6 @@ int main(int argc, char *argv[])
 
   cout << "Min distance = " << editDistance(str1, str2, len1, len2) << endl;
 
-  printDistancesArray(len1, len2);
+  /* printDistancesArray(len1, len2); */
   return 0;
 }
