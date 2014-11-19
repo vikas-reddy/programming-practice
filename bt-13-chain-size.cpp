@@ -19,6 +19,7 @@ int max(int a, int b, int c) {
 
 struct node {
   int data;
+  int lSeries, rSeries;
   struct node *left;
   struct node *right;
 };
@@ -26,9 +27,27 @@ struct node {
 struct node *newNode(int data) {
   struct node *n = (struct node*)malloc(sizeof(struct node));
   n->data = data;
+  n->lSeries = 0;
+  n->rSeries = 0;
   n->left = NULL;
   n->right = NULL;
   return n;
+}
+
+void populateAttrs(node *r, int *maxChain) {
+  if (r == NULL) {
+    return;
+  }
+  int leftMaxChain = 0, rightMaxChain = 0;
+  if (r->left) {
+    populateAttrs(r->left, &leftMaxChain);
+    r->lSeries = r->left->lSeries + 1;
+  }
+  if (r->right) {
+    populateAttrs(r->right, &rightMaxChain);
+    r->rSeries = r->right->rSeries + 1;
+  }
+  *maxChain = max(r->lSeries + r->rSeries + 1, leftMaxChain, rightMaxChain);
 }
 
 void inOrder(struct node *n) {
@@ -47,6 +66,15 @@ void preOrder(struct node *n) {
   printf("%d ", n->data);
   preOrder(n->left);
   preOrder(n->right);
+}
+
+void inOrderExtra(node *r) {
+  if (r == NULL) {
+    return;
+  }
+  inOrderExtra(r->left);
+  printf("%d(%d,%d) ", r->data, r->lSeries, r->rSeries);
+  inOrderExtra(r->right);
 }
 
 int getChainSize(node *r) {
@@ -68,15 +96,15 @@ int getChainSize(node *r) {
   return 1 + lSeries + rSeries;
 }
 
-void longestChainSize(node *r, int *chainSize) {
+void maxChainSize(node *r, int *chainSize) {
   if (r == NULL) {
     return;
   }
-  int leftChainSize = 0, rightChainSize = 0;
+  int leftMax = 0, rightMax = 0;
   int currChainSize = getChainSize(r);
-  longestChainSize(r->left, &leftChainSize);
-  longestChainSize(r->right, &rightChainSize);
-  *chainSize = max(currChainSize, leftChainSize, rightChainSize);
+  maxChainSize(r->left, &leftMax);
+  maxChainSize(r->right, &rightMax);
+  *chainSize = max(currChainSize, leftMax, rightMax);
 }
 
 struct node *createTree() {
@@ -96,13 +124,22 @@ int main(int argc, const char *argv[])
 {
   struct node *root = createTree();
 
-  inOrder(root);
-  printf("\n");
-  preOrder(root);
-  printf("\n");
+  inOrder(root); printf("\n");
+  preOrder(root); printf("\n");
 
-  int chainSize = 0;
-  longestChainSize(root->left, &chainSize);
-  cout << chainSize << endl;
+  /* O(n) solution: populate the lSeries and rSeries attributes in bottom-up
+   * fashion, and use them to compute max chain sizes later, or in the same
+   * iteration */
+  int maxChain = 0;
+  populateAttrs(root, &maxChain);
+  inOrderExtra(root);
+  printf("\n");
+  printf("max chain size: %d\n", maxChain);
+
+
+  /* This one supposedly takes O(n^2) */
+  int chainSize = 0, count = 0;
+  maxChainSize(root, &chainSize);
+  cout << "max chain size: " << chainSize << endl;
   return 0;
 }
