@@ -2,7 +2,7 @@
 using namespace std;
 
 /* Kadane's algorithm */
-int maxSum(const int arr[], const int n) {
+int maxSum1(const int arr[], const int n) {
   int max_ending_here = 0;
   int max_so_far = 0;
 
@@ -41,7 +41,7 @@ int main(int argc, const char *argv[])
   int arr[] = {-2, -3, -4, -1, -2, -1, -5, -3};
   int len = sizeof(arr)/sizeof(arr[0]);
 
-  cout << maxSum(arr, len) << endl;
+  cout << maxSum1(arr, len) << endl;
   cout << maxSum2(arr, len) << endl;
   return 0;
 }
