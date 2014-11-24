@@ -88,6 +88,18 @@ void printLeftView(node *r) {
   printf("\n");
 }
 
+void printLeftViewRec(node *r, int currLevel, int *maxLevel) {
+  if (r == NULL) {
+    return;
+  }
+  if (currLevel > *maxLevel) {
+    printf("%d ", r->data);
+    *maxLevel = currLevel;
+  }
+  printLeftViewRec(r->left, currLevel + 1, maxLevel);
+  printLeftViewRec(r->right, currLevel + 1, maxLevel);
+}
+
 struct node *createTree() {
   struct node *root = newNode(1);
   root->left = newNode(2);
@@ -114,5 +126,10 @@ int main(int argc, const char *argv[])
   printf("\n");
 
   printLeftView(root);
+
+  /* Recursive solution */
+  int maxLevel = 0;
+  printLeftViewRec(root, 1, &maxLevel);
+  printf("\n");
   return 0;
 }
