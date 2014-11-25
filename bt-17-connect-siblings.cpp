@@ -1,4 +1,5 @@
 #include<iostream>
+#include<queue>
 #include<stdlib.h>
 using namespace std;
 
@@ -6,6 +7,7 @@ struct node {
   int data;
   struct node *left;
   struct node *right;
+  struct node *nextRight;
 };
 
 struct node *newNode(int data) {
@@ -13,6 +15,7 @@ struct node *newNode(int data) {
   n->data = data;
   n->left = NULL;
   n->right = NULL;
+  n->nextRight = NULL;
   return n;
 }
 
@@ -32,6 +35,48 @@ void preOrder(struct node *n) {
   printf("%d ", n->data);
   preOrder(n->left);
   preOrder(n->right);
+}
+
+void levelOrder(node *r) {
+  if (r == NULL) {
+    return;
+  }
+
+  node *n;
+  bool levelEnd = false;
+
+  queue<node*> q;
+  q.push(r);
+
+  /* NULLs are level delimiters */
+  q.push(NULL);
+
+  while (!q.empty()) {
+    if (q.front() == NULL) {
+      levelEnd = true;
+      q.pop();
+      if (q.empty()) {
+        // end of the tree
+        break;
+      }
+    }
+
+    n = q.front();
+    q.pop();
+
+    /* connecting the pointers */
+    n->nextRight = q.front();
+
+    if (levelEnd) {
+      levelEnd = false;
+      q.push(NULL);
+    }
+
+    if (n->left)
+      q.push(n->left);
+    if (n->right)
+      q.push(n->right);
+  }
 }
 
 struct node *createTree() {
@@ -57,5 +102,13 @@ int main(int argc, const char *argv[])
   preOrder(root);
   printf("\n");
 
+  levelOrder(root);
+
+  node *n = root->left;
+  while (n) {
+    printf("%d ", n->data);
+    n = n->nextRight;
+  }
+  printf("\n");
   return 0;
 }
