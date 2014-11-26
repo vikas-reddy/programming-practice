@@ -114,6 +114,9 @@ struct node *createTree() {
   root->left->right = newNode(5);
   root->left->left->left = newNode(8);
   root->left->left->right = newNode(9);
+  root->left->right->right = newNode(10);
+  root->left->right->right->right = newNode(11);
+  root->left->right->right->right->right = newNode(12);
   root->right = newNode(3);
   root->right->left = newNode(6);
   root->right->right = newNode(7);
