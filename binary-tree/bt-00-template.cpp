@@ -52,10 +52,8 @@ int main(int argc, const char *argv[])
 {
   struct node *root = createTree();
 
-  inOrder(root);
-  printf("\n");
-  preOrder(root);
-  printf("\n");
+  inOrder(root); printf("\n");
+  preOrder(root); printf("\n");
 
   return 0;
 }
