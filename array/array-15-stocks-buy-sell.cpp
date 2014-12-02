@@ -36,7 +36,7 @@ void tradeStocks(int arr[], int len) {
 void tradeStocksOnce(int arr[], int len) {
   int globalMax, localMax;
   int diff;
-  int buyDay = 0, sellDay = 0;;
+  int buyDay = 0, sellDay = 0, startIdx = 0;
 
   globalMax = localMax = 0;
   for (int i = 0; i < len-1; i++) {
@@ -46,12 +46,13 @@ void tradeStocksOnce(int arr[], int len) {
     localMax += diff;
     if (localMax < 0) {
       localMax = 0;
-      buyDay = i+1;
+      startIdx = i+1;
     }
 
     // maximixing globally
     if (localMax > globalMax) {
       globalMax = localMax;
+      buyDay = startIdx;
       sellDay = i+1;
     }
   }
@@ -63,8 +64,8 @@ int main(int argc, const char *argv[])
 {
   /* int arr[] = {100, 180, 260, 310, 40, 535, 695}; */
   /* int arr[] = {10, 14, 17, 22, 23, 40, 49, 55, 65, 75}; */
-  int arr[] = {56, 63, 74, 70, 93, 62, 97, 30, 25, 0};
-  /* int arr[] = {27, 95, 84, 92, 95, 32, 14, 51, 91, 35}; */
+  /* int arr[] = {56, 63, 74, 70, 93, 62, 97, 30, 25, 0}; */
+  int arr[] = {27, 95, 84, 92, 95, 32, 14, 51, 91, 35};
   /* int arr[] = {97, 73, 67, 66, 60, 30, 26, 18, 3, 3}; */
   int len = sizeof(arr)/sizeof(arr[0]);
 
