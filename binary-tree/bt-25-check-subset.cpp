@@ -17,10 +17,6 @@ struct node *newNode(int data) {
   return n;
 }
 
-void swap (int *a, int *b) {
-  int t = *a; *a = *b; *b = t;
-}
-
 void inOrder(struct node *n) {
   if (n == NULL) {
     return;
@@ -37,6 +33,17 @@ void preOrder(struct node *n) {
   printf("%d ", n->data);
   preOrder(n->left);
   preOrder(n->right);
+}
+
+bool isSubset(node *n, node *r) {
+  if (r == NULL)
+    return false;
+  if (r == n)
+    return true;
+
+  bool ltree = isSubset(n, r->left);
+  bool rtree = isSubset(n, r->right);
+  return ltree || rtree;
 }
 
 struct node *createTree() {
@@ -60,5 +67,8 @@ int main(int argc, const char *argv[])
   inOrder(root); printf("\n");
   preOrder(root); printf("\n");
 
+  /* node *root2 = newNode(34); */
+  node *root2 = root->right->right->right;
+  printf("isSubset: %d\n", isSubset(root2, root));
   return 0;
 }
