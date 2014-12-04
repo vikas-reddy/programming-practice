@@ -128,13 +128,29 @@ void addNumbers2(node *num1, node *num2, node **res) {
   }
 }
 
+
+/* Add a number to a number represented by a linked list
+ *
+ * The number to be added can actually be stored in the `rem` variable and used
+ * in the last call of the recursion to add to the number
+ */
+void addNumberToLL(node *num, node **res, int *rem) {
+  if (num == NULL)
+    return;
+
+  addNumberToLL(num->next, res, rem);
+  int sum = (*rem + num->data);
+  insert(res, sum % 10);
+  *rem = sum / 10;
+}
+
 int main() {
   /* int arr1[] = {9, 9, 3, 9, 4}; */
   /* int arr2[] = {4, 9, 7}; */
-  int arr1[] = {9, 8, 7, 6, 9};
-  int arr2[] = {5, 8, 6, 9, 3};
-  /* int arr1[] = {9, 9, 9, 9}; */
-  /* int arr2[] = {9, 9, 9}; */
+  /* int arr1[] = {9, 8, 7, 6, 9}; */
+  /* int arr2[] = {5, 8, 6, 9, 3}; */
+  int arr1[] = {9, 9, 9, 9};
+  int arr2[] = {9, 9, 9};
   int len1 = sizeof(arr1)/sizeof(arr1[0]);
   int len2 = sizeof(arr2)/sizeof(arr2[0]);
   int i;
@@ -154,7 +170,15 @@ int main() {
   /* int rem = 0; */
   /* addNumbers1(num1, num2, &res); */
 
+  /* node *res = NULL; */
+  /* addNumbers2(num1, num2, &res); */
+  /* printLL(res); */
+
+  /* add a number to a number represented by a linked list */
   node *res = NULL;
-  addNumbers2(num1, num2, &res);
+  int rem = 2;
+  addNumberToLL(num1, &res, &rem);
+  if (rem)
+    insert(&res, rem);
   printLL(res);
 }
