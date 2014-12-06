@@ -120,7 +120,7 @@ int main(int argc, const char *argv[])
   inOrder(root); printf("\n");
   preOrder(root); printf("\n");
 
-  /* levelOrderIterative(root); */
+  levelOrderIterative(root);
   levelOrderRecursive(root);
 
   return 0;
