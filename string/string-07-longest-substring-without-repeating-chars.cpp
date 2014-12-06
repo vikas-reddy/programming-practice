@@ -9,28 +9,23 @@ int longestSubstr(char str[], int n) {
   map<char,int> m;
   int len = 0, lenMax = 0;
   for (int i = 0; i < n; i++) {
+
+    // unvisited character
     if (m.find(str[i]) == m.end()) {
-      // unvisited char
       len++;
-      m[str[i]] = i;
     }
     else {
-      /* printf("%c:", str[i]); */
-      /* printf("%d:%d ", len, m[str[i]]); */
-      lenMax = max(len, lenMax);
-      // if the last occurence of the elment doesn't appear in the longest
-      // length
-      if (i - m[str[i]] > len) {
+      // If the last occurence of the elment doesn't appear in the longest
+      // length.
+      if (i - m[str[i]] > len)
         len++;
-      }
-      else {
+      else
         len = i - m[str[i]];
-      }
-      m[str[i]] = i;
-      /* printf("%d:%d ", len, m[str[i]]); */
     }
+    m[str[i]] = i;
+    lenMax = max(len, lenMax);
   }
-  lenMax = max(len, lenMax);
+  /* lenMax = max(len, lenMax); */
   return lenMax;
 }
 
