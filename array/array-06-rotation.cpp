@@ -8,6 +8,12 @@ void swap(int *a, int *b) {
   *b = temp;
 }
 
+void swapList (int arr[], int fIdx, int sIdx, int d) {
+  for (int i = 0; i < d; i++) {
+    swap (&arr[fIdx + i], &arr[sIdx + i]);
+  }
+}
+
 void printArray(int arr[], int len) {
   for (int i = 0; i < len; i++) {
     printf("%d ", arr[i]);
@@ -31,6 +37,7 @@ int binarySearch(int arr[], int len, int rot, int num, int low, int high) {
   return -1;
 }
 
+// Uses temporary array of size `rot` as auxiliary space
 int rotateArray1(int arr[], int len, int rot) {
   int temp[rot];
 
@@ -50,6 +57,8 @@ int rotateArray1(int arr[], int len, int rot) {
   }
 }
 
+// O(n*d) algorithm
+// Rotates array one by one
 int rotateArray2(int arr[], int len, int rot) {
   for (int i = 0; i < rot; i++) {
     int temp = arr[0];
@@ -61,6 +70,30 @@ int rotateArray2(int arr[], int len, int rot) {
   }
 }
 
+// Block swap algorithm
+void rotateArray3 (int *arr, int len, int d) {
+  // Do nothing
+  if (d == 0 || d == len)
+    return;
+
+  if (d == len - d) {
+    swapList(arr, 0, len-d, d);
+    return;
+  }
+
+  // AB = A B1 B2 -> B2 B1 A
+  if (d < len - d) {
+    // d + (n-2*d) + d
+    swapList (arr, 0, len - d, d);
+    rotateArray3 (arr, len - d, d);
+  }
+  else {
+    // (n-d) + (2*d-n) + (n-d)
+    swapList (arr, 0, d, len - d);
+    rotateArray3 (arr + len - d, d, 2*d - len);
+  }
+}
+
 int main(int argc, const char *argv[])
 {
   /* int arr[] = {72, 73, 73, 75, 80, 85, 89, 1, 5, 7, 11, 20, 20, 21, 39, 43, 43, 44, 48, 53}; */
@@ -68,12 +101,14 @@ int main(int argc, const char *argv[])
   /* int arr[] = {1, 5, 7, 11, 20, 20, 21, 39, 43, 43, 44, 48, 53, 72, 73, 73, 75, 80, 85, 89}; */
   /* int len = 20, rot = 0; */
   int arr[] = {1, 2, 3, 4, 5, 6, 7};
-  int len = 7, rot = 2;
+  int len = 7, rot = 5;
 
   printArray(arr, len);
 
   for (int i = 0; i < 5; i++) {
-    rotateArray1(arr, len, rot);
+    /* rotateArray1(arr, len, rot); */
+    /* rotateArray2(arr, len, rot); */
+    rotateArray3(arr, len, rot);
     printArray(arr, len);
   }
   /* for (int i = rot; i < len + rot; i++) { */
