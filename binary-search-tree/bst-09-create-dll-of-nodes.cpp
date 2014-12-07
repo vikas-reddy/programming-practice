@@ -70,6 +70,25 @@ void createDLL(node *root, node **pre, node **dll) {
   createDLL(root->right, pre, dll);
 }
 
+void createDLL2 (node *root, node **head, node **tail) {
+  if (root == NULL)
+    return;
+
+  // modified inOrder
+  createDLL2(root->left, head, tail);
+
+  root->left = *tail;
+
+  if (*tail)
+    (*tail)->right = root;
+  else
+    *head = root;
+
+  *tail = root;
+
+  createDLL2(root->right, head, tail);
+}
+
 int main(int argc, const char *argv[])
 {
   int arr[] = {8, 84, 37, 82, 55, 99, 16, 40, 78, 64};
@@ -83,6 +102,7 @@ int main(int argc, const char *argv[])
   inOrder(root); printf("\n");
   preOrder(root); printf("\n");
 
+  /*
   node *pre = NULL;
   node *dll = NULL;
   createDLL(root, &pre, &dll);
@@ -97,6 +117,18 @@ int main(int argc, const char *argv[])
   // printing the DLL in reverse
   for (n = dll; n->right; n = n->right);
   for (  ; n; n = n->left)
+    printf("%d ", n->data);
+  printf("\n");
+  */
+
+  node *head = NULL, *tail = NULL;
+  createDLL2 (root, &head, &tail);
+
+  for (node *n = head; n; n = n->right)
+    printf("%d ", n->data);
+  printf("\n");
+
+  for (node *n = tail; n; n = n->left)
     printf("%d ", n->data);
   printf("\n");
 
