@@ -5,29 +5,43 @@
 using namespace std;
 
 struct node {
-  struct node *next;
   int data;
+  node *next;
 };
 
-void insert(struct node **root, int elem) {
-  struct node *n = (struct node *)malloc(sizeof(struct node));
+void push (node **head, int elem) {
+  node *n = (node *)malloc(sizeof(node));
   n->data = elem;
-  n->next = *root;
-  (*root) = n;
+  n->next = *head;
+  (*head) = n;
   return;
 }
 
-int sizeLL(struct node *root) {
+void push_back (node **head, node **tail, int elem) {
+  node *n = (node*)malloc(sizeof(node));
+  n->data = elem;
+  n->next = NULL;
+
+  if (*head == NULL) {
+    *head = *tail = n;
+  }
+  else {
+    (*tail)->next = n;
+    *tail = n;
+  }
+}
+
+int sizeLL (node *head) {
   int size = 0;
-  struct node *n = root;
+  node *n = head;
   for (size = 0; n; n = n->next, size++);
   return size;
 }
 
-void printLL(struct node *root) {
-  if (root) {
-    struct node *n = root;
-    for (n = root; n; n = n->next) {
+void printLL(node *head) {
+  if (head) {
+    node *n = head;
+    for (n = head; n; n = n->next) {
       printf("%d ", n->data);
     }
     printf("\n");
@@ -39,10 +53,11 @@ int main() {
   int len = sizeof(arr)/sizeof(arr[0]);
 
   // initializing an empty LL
-  struct node *root = NULL;
+  node *head = NULL, *tail = NULL;
 
   for (int i = 0; i < len; i++) {
-    insert(&root, arr[i]);
+    /* push (&head, arr[i]); */
+    push_back (&head, &tail, arr[i]);
   }
-  printLL(root);
+  printLL(head);
 }
