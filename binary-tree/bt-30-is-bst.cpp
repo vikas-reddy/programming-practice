@@ -49,7 +49,7 @@ struct node *createTree() {
   root->left->right->right = newNode(9);
   root->right = newNode(20);
   root->right->left = newNode(15);
-  root->right->right = newNode(52);
+  root->right->right = newNode(25);
   root->right->right->right = newNode(30);
   return root;
 }
@@ -74,11 +74,6 @@ bool isBST2 (node *r, int *min, int *max) {
   if (r == NULL)
     return true;
 
-  if (r->left == NULL && r->right == NULL) {
-    *min = *max = r->data;
-    return true;
-  }
-
   // Left recursion
   int lmin = INT_MIN, lmax = INT_MAX;
   bool is_bst_l = isBST2 (r->left, &lmin, &lmax);
@@ -94,12 +89,15 @@ bool isBST2 (node *r, int *min, int *max) {
     return false;
 
   // The root
-  printf("r:%d lmin:%d, lmax:%d rmin:%d rmax:%d\n", r->data, lmin, lmax, rmin, rmax);
   // If either child is empty, we need not check its value
   if ( (lmax == INT_MAX || lmax < r->data) &&
        (rmin == INT_MIN || r->data <= rmin) ) {
-    *min = lmin;
-    *max = rmax;
+
+    // if we have a NULL to the left, min is current node
+    *min = (lmin == INT_MIN ? r->data : lmin);
+
+    // if we have a NULL to the right, max is current node
+    *max = (rmax == INT_MAX ? r->data : rmax);
     return true;
   }
 
@@ -117,5 +115,6 @@ int main(int argc, const char *argv[])
 
   int min = INT_MIN, max = INT_MAX;
   cout << "isBST2: " << isBST2(root, &min, &max) << endl;
+  cout << "min: " << min << " max: " << max << endl;
   return 0;
 }
