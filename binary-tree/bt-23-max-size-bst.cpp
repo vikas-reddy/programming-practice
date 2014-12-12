@@ -4,6 +4,8 @@
 #include<algorithm>
 using namespace std;
 
+/* look at bt-11 */
+
 struct node {
   int data;
   struct node *left;
