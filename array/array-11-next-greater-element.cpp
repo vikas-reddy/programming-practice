@@ -74,7 +74,7 @@ void printNge2(int arr[], int len) {
 void printNge3 (int arr[], int len) {
   stack<int> s;
   for (int i = 0; i < len; i++) {
-    // Pop elements from the stack which are lesser than the current elements
+    // Pop elements from the stack which are lesser than the current element
     while (!s.empty() && s.top() < arr[i]) {
       printf("%d - %d\n", s.top(), arr[i]);
       s.pop();
@@ -95,12 +95,14 @@ int main(int argc, const char *argv[])
 {
   /* int arr[] = {4, 5, 2, 25}; */
   /* int arr[] = {13, 7, 6, 12}; */
-  int arr[] = {39, 59, 24, 21, 42, 57, 12, 4, 73, 65};
+  int arr[] = {11, 13, 12, 21, 3};
+  /* int arr[] = {39, 59, 24, 21, 42, 57, 12, 4, 73, 65}; */
+  /* int arr[] = {27, 28, 86, 12, 72, 51, 28, 51, 22, 95}; */
   int len = sizeof(arr)/sizeof(arr[0]);
 
-  printNge1(arr, len);
+  /* printNge1(arr, len); */
 
-  printNge2(arr, len);
+  /* printNge2(arr, len); */
 
   printNge3(arr, len);
 
