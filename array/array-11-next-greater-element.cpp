@@ -70,6 +70,27 @@ void printNge2(int arr[], int len) {
   }
 }
 
+// Simple O(n) solution
+void printNge3 (int arr[], int len) {
+  stack<int> s;
+  for (int i = 0; i < len; i++) {
+    // Pop elements from the stack which are lesser than the current elements
+    while (!s.empty() && s.top() < arr[i]) {
+      printf("%d - %d\n", s.top(), arr[i]);
+      s.pop();
+    }
+
+    // Push the current element
+    s.push(arr[i]);
+  }
+
+  // These are the elements for which there are no NGEs
+  while (!s.empty()) {
+    printf("%d - -1\n", s.top());
+    s.pop();
+  }
+}
+
 int main(int argc, const char *argv[])
 {
   /* int arr[] = {4, 5, 2, 25}; */
@@ -80,6 +101,8 @@ int main(int argc, const char *argv[])
   printNge1(arr, len);
 
   printNge2(arr, len);
+
+  printNge3(arr, len);
 
   return 0;
 }
