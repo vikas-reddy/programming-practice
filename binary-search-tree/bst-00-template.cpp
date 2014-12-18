@@ -1,69 +1,86 @@
 #include<iostream>
 #include<stdlib.h>
-#include<algorithm>
+
 using namespace std;
 
-struct node {
+class node {
+  public:
   int data;
-  struct node *left;
-  struct node *right;
+  node *left, *right;
+
+  node (int data) {
+    this->data = data;
+    left = NULL;
+    right = NULL;
+  }
 };
 
-struct node *newNode(int data) {
-  struct node *n = (struct node*)malloc(sizeof(struct node));
-  n->data = data;
-  n->left = NULL;
-  n->right = NULL;
-  return n;
-}
+class BSTree {
+  node *root;
 
-void swap (int *a, int *b) {
-  int t = *a; *a = *b; *b = t;
-}
-
-node* insert(node *root, int data) {
-  if (root == NULL) {
-    root = newNode(data);
+  public:
+  BSTree () {
+    root = NULL;
   }
-  else {
-    if (data < root->data)
-      root->left = insert(root->left, data);
+
+  void insert (int data) {
+    root = insertUtil(root, data);
+  }
+
+  void inOrder () {
+    inOrderUtil(root);
+    printf("\n");
+  }
+
+  void preOrder () {
+    preOrderUtil(root);
+    printf("\n");
+  }
+
+  private:
+
+  node* insertUtil (node *r, int data) {
+    if (r == NULL)
+      return (new node(data));
+
+    if (data < r->data)
+      r->left = insertUtil(r->left, data);
     else
-      root->right = insert(root->right, data);
-  }
-  return root;
-}
+      r->right = insertUtil(r->right, data);
 
-void inOrder(struct node *n) {
-  if (n == NULL) {
-    return;
+    return r;
   }
-  inOrder(n->left);
-  printf("%d ", n->data);
-  inOrder(n->right);
-}
 
-void preOrder(struct node *n) {
-  if (n == NULL) {
-    return;
+  void inOrderUtil (node *r) {
+    if (r == NULL)
+      return;
+    inOrderUtil(r->left);
+    printf("%d ", r->data);
+    inOrderUtil(r->right);
   }
-  printf("%d ", n->data);
-  preOrder(n->left);
-  preOrder(n->right);
-}
 
+  void preOrderUtil (node *r) {
+    if (r == NULL)
+      return;
+    printf("%d ", r->data);
+    preOrderUtil(r->left);
+    preOrderUtil(r->right);
+  }
+};
+
+/* MAIN */
 int main(int argc, const char *argv[])
 {
-  int arr[] = {81, 7, 64, 59, 5, 92, 65, 36, 65, 34};
+  int arr[] = {27, 2, 86, 12, 72, 50, 28, 51, 22, 95};
   int len = sizeof(arr)/sizeof(arr[0]);
 
-  struct node *root = NULL;
+  BSTree *t = new BSTree();
 
-  for (int i = 0; i < len; i++)
-    root = insert(root, arr[i]);
-
-  inOrder(root); printf("\n");
-  preOrder(root); printf("\n");
+  for (int i = 0; i < len; i++) {
+    t->insert(arr[i]);
+  }
+  t->inOrder();
+  t->preOrder();
 
   return 0;
 }
