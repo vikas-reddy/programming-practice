@@ -4,6 +4,8 @@
 #include<stdio.h>
 #include<limits.h>
 
+#define MOVES 4
+
 using namespace std;
 
 /*
@@ -17,7 +19,7 @@ using namespace std;
 void printMat (int **mat, int R, int C) {
   for (int r = 0; r < R; r++) {
     for (int c = 0; c < C; c++)
-      printf("%d ", mat[r][c]);
+      printf("%2d ", mat[r][c]);
     printf("\n");
   }
   printf("\n");
@@ -50,7 +52,7 @@ int findMax (int **mat, int R, int C) {
 
 // The maximize algorithm
 int maximizePaths (int **mat, int **len, int R, int C) {
-  static int moves[4][2] = {
+  static int moves[MOVES][2] = {
     {0, 1}, {0, -1}, {1, 0}, {-1, 0}
   };
 
@@ -61,7 +63,7 @@ int maximizePaths (int **mat, int **len, int R, int C) {
 
   for (int r = 0; r < R; r++) {
     for (int c = 0; c < C; c++) {
-      for (int m = 0; m < 4; m++) {
+      for (int m = 0; m < MOVES; m++) {
         x = r + moves[m][0];
         y = c + moves[m][1];
 
@@ -81,7 +83,7 @@ int maximizePaths (int **mat, int **len, int R, int C) {
 
 // Runs the "maximize" algorithm (bottom-up DP) until we can no longer maximize
 // any path in the matrix
-int longestPath (int **mat, int R, int C) {
+int longestPathDP (int **mat, int R, int C) {
 
   // Initialize len
   int **len = new int*[R];
@@ -103,6 +105,63 @@ int longestPath (int **mat, int R, int C) {
   } while (n > 0 && ct < R * C);
 
   return findMax(len, R, C);
+}
+
+// DFS starting at (r,c)
+int pathLength (int **mat, int **dist, int R, int C, int r, int c) {
+  static int moves[MOVES][2] = {
+    {0, 1}, {0, -1}, {1, 0}, {-1, 0}
+  };
+
+  // We only need to process peaks which are not already processed
+  if (dist[r][c] > 0)
+    return dist[r][c];
+
+  // minimum we need to start processing with
+  dist[r][c] = 1;
+
+  for (int m = 0; m < MOVES; m++) {
+    int x = r + moves[m][0];
+    int y = c + moves[m][1];
+
+    if (isValid(x, y, R, C) && mat[x][y] < mat[r][c]) {
+
+      int l = dist[x][y];
+
+      // recurse only to unvisited peaks
+      if (!dist[x][y])
+        l = pathLength(mat, dist, R, C, x, y);
+
+      // maximize the skiing length of the current peak
+      if (dist[r][c] < l + 1)
+        dist[r][c] = l + 1;
+    }
+  }
+
+  return dist[r][c];
+}
+
+int longestPathGraph (int **mat, int R, int C) {
+  int **dist = new int*[R];
+  for (int i = 0; i < R; i++)
+    dist[i] = new int[C];
+
+  for (int i = 0; i < R; i++)
+    for (int j = 0; j < C; j++)
+      dist[i][j] = 0;
+
+  int maxLen = 1, len;
+
+  for (int r = 0; r < R; r++) {
+    for (int c = 0; c < C; c++) {
+      if (!dist[r][c]) {
+        len = pathLength(mat, dist, R, C, r, c);
+        maxLen = max(maxLen, len);
+      }
+    }
+  }
+
+  return maxLen;
 }
 
 
@@ -154,7 +213,8 @@ int main(int argc, const char *argv[])
 
     /* printMat(mat, R, C); */
 
-    cout << place << ": " << longestPath(mat, R, C) << endl;
+    /* cout << place << ": " << longestPathDP(mat, R, C) << endl; */
+    cout << place << ": " << longestPathGraph(mat, R, C) << endl;
 
     freeMatrix(mat, R, C);
   }
