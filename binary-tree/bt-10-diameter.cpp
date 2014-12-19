@@ -37,14 +37,35 @@ int depth (struct node *r) {
   return 1 + max(depth(r->left), depth(r->right));
 }
 
-int diameter(struct node *r) {
+// O(n2)
+int diameter1(struct node *r) {
   if (r == NULL) {
     return 0;
   }
   int depth_l = depth(r->left), depth_r = depth(r->right);
-  int dia_l = diameter(r->left), dia_r = diameter(r->right);
+  int dia_l = diameter1(r->left), dia_r = diameter1(r->right);
   int x = depth_l + depth_r + 1;
   return max(x, max(dia_l, dia_r));
+}
+
+// O(n), works in post order fashion
+// Returns the depth of the tree, but stores the [maximum] diameter in *dia
+// reference
+int diameter2 (node *r, int *dia) {
+  if (r == NULL)
+    return 0;
+
+  int l_depth = diameter2(r->left, dia);
+  int r_depth = diameter2(r->right, dia);
+
+  int curr_dia = l_depth + r_depth + 1;
+  int curr_depth = max(l_depth, r_depth) + 1;
+
+  // Maximizing the diameter
+  if (*dia < curr_dia)
+    *dia = curr_dia;
+
+  return curr_depth;
 }
 
 void createTrees(struct node **r1, struct node **r2) {
@@ -84,11 +105,14 @@ int main(int argc, const char *argv[])
   struct node *r1 = NULL, *r2 = NULL;
   createTrees(&r1, &r2);
 
-  inOrder(r1);
-  printf("\n");
-  inOrder(r2);
-  printf("\n");
+  inOrder(r1); printf("\n");
+  inOrder(r2); printf("\n");
 
-  printf("%d, %d\n", diameter(r1), diameter(r2));
+  printf("%d, %d\n", diameter1(r1), diameter1(r2));
+
+  int dia1 = 0, dia2 = 0;
+  diameter2(r1, &dia1), diameter2(r2, &dia2);
+  printf("%d, %d\n", dia1, dia2);
+
   return 0;
 }

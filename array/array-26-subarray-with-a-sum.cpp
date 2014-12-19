@@ -27,7 +27,6 @@ void printSubarray (int arr[], int len, int sum) {
       printArray(arr, f, i-1);
       return;
     }
-    /* printf("f: %d, l: %d, curr_sum: %d \n", f, l-1, curr_sum); */
 
     if (i < len)
       curr_sum += arr[i];
