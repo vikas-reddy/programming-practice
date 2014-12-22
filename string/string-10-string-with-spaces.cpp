@@ -36,10 +36,6 @@ void printSpaces (char *str, int strLen, char *temp, int tempLen) {
       temp[tempLen++] = str[0];
       printSpaces (str + 1, strLen - 1, temp, tempLen);
 
-      tempLen--;
-
-      // recurse with space
-      temp[tempLen++] = str[0];
       temp[tempLen++] = ' ';
       printSpaces (str + 1, strLen - 1, temp, tempLen);
   }
