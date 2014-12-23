@@ -64,16 +64,30 @@ struct node *create_binary_tree(int arr[], int f, int l) {
   return r;
 }
 
+node *binary_tree2 (int arr[], int *start, int len) {
+  if (len <= 0)
+    return NULL;
+
+  node *l_subtree = binary_tree2(arr, start, len/2);
+  node *r = newNode(arr[*start]);
+  (*start)++;
+
+  r->left = l_subtree;
+  r->right = binary_tree2(arr, start, len - len/2 - 1);
+  return r;
+}
+
 struct node *binary_tree(int arr[], int len) {
   return create_binary_tree(arr, 0, len - 1);
 }
 
 int main(int argc, const char *argv[])
 {
-  /* int arr[] = {1, 16, 21, 31, 32, 33, 44, 64, 67, 94}; */
-  int arr[] = {31, 42, 47, 47, 48, 79, 83, 89, 93, 98};
+  int arr[] = {1, 16, 21, 31, 32, 33, 44, 64, 67, 94};
+  /* int arr[] = {31, 42, 47, 47, 48, 79, 83, 89, 93, 98}; */
   int len = 10;
-  struct node *root = binary_tree(arr, len);
+  int start = 0;
+  struct node *root = binary_tree2(arr, &start, len);
 
   inOrder(root);
   printf("\n");
