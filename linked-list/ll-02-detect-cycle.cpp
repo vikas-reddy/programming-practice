@@ -88,6 +88,8 @@ void removeCycleFloyd(node *root, node *loopNode) {
   ptr1 = root;
   while (1) {
     ptr2 = loopNode;
+
+    // Run ptr2 inside the loop until it reaches a pointer we started from root
     while (ptr2->next != loopNode && ptr2->next != ptr1) {
       ptr2 = ptr2->next;
     }
@@ -96,6 +98,7 @@ void removeCycleFloyd(node *root, node *loopNode) {
       ptr2->next = NULL;
       return;
     }
+
     ptr1 = ptr1->next;
   }
 }
