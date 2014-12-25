@@ -75,7 +75,8 @@ int computeHeight2 (int arr[], int len) {
 int main(int argc, const char *argv[])
 {
   /* int arr[] = {-1, 0, 0, 1, 1, 2, 2, 4, 4, 6, 9}; */
-  int arr[] = {9, 5, 5, 7, 2, 7, 9, -1, 3, 3};
+  /* int arr[] = {9, 5, 5, 7, 2, 7, 9, -1, 3, 3}; */
+  int arr[] = {1, 5, 5, 2, 2, -1, 3};
   int len = sizeof(arr)/sizeof(arr[0]);
 
   cout << "Height: " << computeHeight2(arr, len) << endl;
