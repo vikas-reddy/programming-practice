@@ -35,7 +35,7 @@ void rearrange (int arr[], int n) {
     for (     ; a < n && arr[a] <  0; a++);
     for (b = a; b < n && arr[b] >= 0; b++);
 
-    if (a >= n || b >= n || a > b)
+    if (a >= n || b >= n || a >= b)
       break;
 
     // Shift the subarray (a,b-1) to right by one
