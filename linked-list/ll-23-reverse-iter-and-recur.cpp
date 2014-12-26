@@ -48,39 +48,37 @@ void printLL(node *head) {
   }
 }
 
-void findKth (node *head, unsigned k, int *curr, int *elem) {
-  // base case
-  if (head == NULL) {
-    *curr = 0;
+void recursiveReverse (node **head, node **tail) {
+  // Base case
+  if (*head == NULL || (*head)->next == NULL)
     return;
-  }
 
-  // recursion first
-  findKth (head->next, k, curr, elem);
+  // Recursion
+  node *nxt = (*head)->next;
+  recursiveReverse(&nxt, tail);
 
-  // increment the curr index (idx from last)
-  (*curr)++;
-
-  // setting `elem` when we encounter kth element
-  if (*curr == k) {
-    *elem = head->data;
-  }
+  // Connecting the links
+  (*tail)->next = *head;
+  *tail = *head;
+  (*tail)->next = NULL;
+  *head = nxt;
 }
 
-node *findKth2 (node *head, int k, int *curr) {
-  if (head == NULL || k <= 0) {
-    *curr = 0;
-    return NULL;
-  }
+void iterativeReverse (node **head, node **tail) {
+  node *res = NULL;
+  node *n = *head, *temp;
 
-  node *res = findKth2(head->next, k, curr);
-  if (res)
-    return res;
-  (*curr)++;
-  return (*curr == k ? head : NULL);
+  *tail = *head;
+  while (n) {
+    temp = n->next;
+    n->next = res;
+    res = n;
+    n = temp;
+  }
+  *head = res;
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   int arr[] = {96, 7, 64, 50, 53, 89, 54, 6, 60, 99};
   int len = sizeof(arr)/sizeof(arr[0]);
 
@@ -88,20 +86,13 @@ int main(int argc, char* argv[]) {
   node *head = NULL, *tail = NULL;
 
   for (int i = 0; i < len; i++) {
-    push (&head, arr[i]);
-    /* push_back (&head, &tail, arr[i]); */
+    /* push (&head, arr[i]); */
+    push_back (&head, &tail, arr[i]);
   }
   printLL(head);
 
-  if (argc < 2)
-    return 1;
+  iterativeReverse(&head, &tail);
+  /* recursiveReverse(&head, &tail); */
 
-  int curr, k = atoi(argv[1]);
-  node *res = findKth2(head, k, &curr);
-  printf("%d th element = %d \n", k, (res ? res->data : -1));
-
-  /* unsigned k = atoi(argv[1]); */
-  /* int curr, elem; */
-  /* findKth (head, k, &curr, &elem); */
-  /* printf("%dth element = %d\n", k, (curr >= k ? elem : -1)); */
+  printLL(head);
 }
