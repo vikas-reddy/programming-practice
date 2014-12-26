@@ -1,10 +1,12 @@
 #include<iostream>
 #include<stdlib.h>
+#include<stack>
 #include<algorithm>
 using namespace std;
 
 struct node {
   int data;
+  int level;
   struct node *left;
   struct node *right;
 };
@@ -53,18 +55,53 @@ struct node *createTree() {
   return root;
 }
 
-void rotate (node *r, int level) {
+void swapChildren (node *r) {
   if (r == NULL)
     return;
 
-  if (level % 2) {
-    node *temp = r->left;
-    r->left = r->right;
-    r->right = temp;
+  /* printf("rotate: %d \n", r->data); */
+  node *temp = r->left;
+  r->left = r->right;
+  r->right = temp;
+}
+
+void rotate_recursive (node *r, int level) {
+  if (r == NULL)
+    return;
+
+  if (level % 2)
+    swapChildren(r);
+
+  rotate_recursive(r->left, level + 1);
+  rotate_recursive(r->right, level + 1);
+}
+
+void iterative_recursive (node *r) {
+  int level = 0;
+  stack<node*> s;
+  node *n = r, *t;
+
+  while (n) {
+    n->level = ++level;
+    s.push(n);
+    n = n->left;
   }
 
-  rotate(r->left, level + 1);
-  rotate(r->right, level + 1);
+  while (!s.empty()) {
+    n = s.top();
+    s.pop();
+
+    level = n->level;
+    t = n->right;
+    while (t) {
+      t->level = ++level;
+      s.push(t);
+      t = t->left;
+    }
+
+    if (n->level % 2)
+      swapChildren(n);
+  }
 }
 
 int main(int argc, const char *argv[])
@@ -74,7 +111,10 @@ int main(int argc, const char *argv[])
   inOrder(root); printf("\n");
   preOrder(root); printf("\n");
 
-  rotate(root, 1);
+  /* rotate_recursive(root, 1); */
+  /* rotate_recursive(root, 1); */
+  iterative_recursive(root);
+  iterative_recursive(root);
 
   inOrder(root); printf("\n");
   preOrder(root); printf("\n");
