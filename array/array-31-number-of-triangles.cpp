@@ -15,13 +15,11 @@ void printArray(int arr[], int len) {
   printf("\n");
 }
 
-int findThird (int arr[], int n, int a, int b) {
-  int c = b + 1;
-  while (c < n && arr[c] < arr[a] + arr[b])
-    c++;
-  return c - 1;
-}
-
+/*
+ * O(n^2) algorithm
+ * for every `a`, `b` and `c` travel till the end only once
+ *
+ */
 int numTriangles (int arr[], int n) {
   if (n < 3)
     return 0;
@@ -33,9 +31,13 @@ int numTriangles (int arr[], int n) {
   int count = 0;
 
   for (int a = 0; a < n-2; a++) {
+    int c = a + 2;
     for (int b = a+1; b < n-1; b++) {
-      c = findThird(arr, n, a, b);
-      count += c - b;
+
+      while (c < n && arr[c] < arr[a] + arr[b])
+        c++;
+
+      count += c - b - 1;
     }
   }
   return count;
@@ -43,8 +45,9 @@ int numTriangles (int arr[], int n) {
 
 int main(int argc, const char *argv[])
 {
-  int arr[] = {10, 21, 22, 100, 101, 200, 300};
+  /* int arr[] = {10, 21, 22, 100, 101, 200, 300}; */
   /* int arr[] = {4, 6, 3, 7}; */
+  int arr[] = {20, 25, 30, 35, 40, 45, 50, 55, 60};
   int len = sizeof(arr)/sizeof(arr[0]);
 
   printArray(arr, len);
