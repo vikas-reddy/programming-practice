@@ -39,14 +39,17 @@ void preOrder(struct node *n) {
   preOrder(n->right);
 }
 
-struct node *createTree() {
-  struct node *r  = newNode(10);
-  r->left         = newNode(8);
-  r->right        = newNode(2);
-  r->left->left   = newNode(3);
-  r->left->right  = newNode(5);
-  r->right->right = newNode(2);
-  return r;
+void convertToChildSum (node *r) {
+  // Base case: do nothing!
+  if (r == NULL ||
+      r->left == NULL && r->right == NULL)
+    return;
+
+  convertToChildSum(r->left);
+  convertToChildSum(r->right);
+
+  r->data = (r->left ? r->left->data : 0) +
+            (r->right ? r->right->data : 0);
 }
 
 bool isChildSum1 (node *r, int *sum) {
@@ -87,16 +90,51 @@ bool isChildSum2 (node *r) {
       );
 }
 
+struct node *createTree1() {
+  struct node *r  = newNode(10);
+  r->left         = newNode(8);
+  r->right        = newNode(2);
+  r->left->left   = newNode(3);
+  r->left->right  = newNode(5);
+  r->right->right = newNode(2);
+  return r;
+}
+
+struct node *createTree2() {
+  struct node *root = newNode(1);
+  root->left = newNode(2);
+  root->left->left = newNode(4);
+  root->left->right = newNode(5);
+  root->left->right->left = newNode(8);
+  root->left->right->right = newNode(9);
+  root->right = newNode(3);
+  root->right->left = newNode(6);
+  root->right->right = newNode(7);
+  root->right->right->right = newNode(10);
+  return root;
+}
+
 int main(int argc, const char *argv[])
 {
-  struct node *root = createTree();
+  struct node *r1 = createTree1();
 
-  inOrder(root); printf("\n");
-  preOrder(root); printf("\n");
+  inOrder(r1); printf("\n");
+  preOrder(r1); printf("\n");
 
+  /* Check for child-sum property */
   int sum = 0;
-  cout << isChildSum1(root, &sum) << endl;
-  cout << isChildSum2(root) << endl;
+  cout << isChildSum1(r1, &sum) << endl;
+  cout << isChildSum2(r1) << endl;
 
+  node *r2 = createTree2();
+
+  inOrder(r2); printf("\n");
+  preOrder(r2); printf("\n");
+
+  /* Convert a binary tree to a child-sum tree */
+  convertToChildSum(r2);
+
+  inOrder(r2); printf("\n");
+  preOrder(r2); printf("\n");
   return 0;
 }
