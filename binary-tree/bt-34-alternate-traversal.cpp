@@ -1,9 +1,26 @@
 #include<iostream>
 #include<stdlib.h>
 #include<cmath>
+#include<queue>
 #include<algorithm>
 
 using namespace std;
+
+/*
+   For perfect binary trees only:
+
+             15
+            /  \
+          13    14
+        /  \    /  \
+       9   10  11   12
+      / \  / \ / \  / \
+     1  2  3 4 5 6  7 8
+
+     Traversal1: 1 8 2 7 3 6 4 5 9 12 10 11 13 14 15
+     Traversal2: 15 13 14 9 12 10 11 1 8 2 7 3 6 4 5
+
+ */
 
 struct node {
   int data;
@@ -59,17 +76,15 @@ node *getNode (node *r, int num, int bits) {
   return r;
 }
 
-void traversal (node *r) {
+void traversal1 (node *r) {
   int height = 0;
   for (node *n = r; n; n = n->left, height++);
 
   if (height == 0)
     return;
 
-  int level = height - 1;
-
-  for (int level = height - 1; level > 0; level--) {
-    int bits = level, last = pow(2, level);
+  for (int bits = height - 1; bits > 0; bits--) {
+    int last = pow(2, bits);
 
     for (int i = 0, j = last-1; i < j; i++, j--) {
       cout << getNode(r, i, bits)->data << " ";
@@ -77,6 +92,44 @@ void traversal (node *r) {
     }
   }
   cout << r->data << endl;
+}
+
+/* Modified level order:
+ * O(n) space
+ * O(n) time
+ */
+void traversal2 (node *r) {
+  if (r == NULL)
+    return;
+
+  printf("%d ", r->data);
+
+  if (r->left == NULL) {
+    printf("\n");
+    return;
+  }
+
+  node *first, *second;
+
+  queue<node*> q;
+  q.push(r->left);
+  q.push(r->right);
+
+  // there are always even or zero number of nodes in the queue
+  while (!q.empty()) {
+    first = q.front();  q.pop();
+    second = q.front(); q.pop();
+
+    printf("%d %d ", first->data, second->data);
+
+    if (first->left) {
+      q.push(first->left);
+      q.push(second->right);
+      q.push(first->right);
+      q.push(second->left);
+    }
+  }
+  printf("\n");
 }
 
 struct node *createTree() {
@@ -105,7 +158,8 @@ int main(int argc, const char *argv[])
   inOrder(root); printf("\n");
   preOrder(root); printf("\n");
 
-  traversal(root);
+  traversal1(root);
+  traversal2(root);
 
   return 0;
 }
