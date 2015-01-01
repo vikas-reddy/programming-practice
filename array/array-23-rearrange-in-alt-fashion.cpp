@@ -69,13 +69,11 @@ void rightRotate (int arr[], int f, int l) {
   arr[f] = temp;
 }
 
-// O(n)
 void rearrange2 (int arr[], int n) {
   int a, b;
   a = 0;
 
   // putting all negative numbers at the beginning
-  // O(n) as a and b traverse through the length of the array only once
   while (true) {
     // Find the first non-negative number
     for (     ; a < n && arr[a] < 0;  a++);
@@ -103,7 +101,6 @@ void rearrange2 (int arr[], int n) {
   b = neg_count;
 
   // Rearranging in alternate fashion
-  // O(n)
   while (a < n && b < n && a < b) {
     rightRotate(arr, a, b);
     a += 2;
