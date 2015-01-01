@@ -1,5 +1,8 @@
 #include<iostream>
+#include<stdlib.h>
+
 #define MAX_SIZE 100
+
 using namespace std;
 
 void printParens(int n, int pos, int open, int close) {
@@ -23,7 +26,10 @@ void printParens(int n, int pos, int open, int close) {
 
 int main(int argc, const char *argv[])
 {
-  int n = 4;
+  if (argc < 2)
+    return 1;
+
+  int n = atoi(argv[1]);
 
   int pos = 0, open = 0, close = 0;
 
