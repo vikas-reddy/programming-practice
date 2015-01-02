@@ -24,6 +24,20 @@ void printParens(int n, int pos, int open, int close) {
   }
 }
 
+void numParens (int n, int open, int close, int &parensCount) {
+  if (close == n) {
+    parensCount++;
+    return;
+  }
+
+  if (open > close) {
+    numParens(n, open, close + 1, parensCount);
+  }
+  if (open < n) {
+    numParens(n, open + 1, close, parensCount);
+  }
+}
+
 int main(int argc, const char *argv[])
 {
   if (argc < 2)
@@ -34,5 +48,10 @@ int main(int argc, const char *argv[])
   int pos = 0, open = 0, close = 0;
 
   printParens(n, pos, open, close);
+
+  int parensCount = 0;
+  numParens(n, open, close, parensCount);
+  cout << "Parentheses: " << parensCount << endl;
+
   return 0;
 }
