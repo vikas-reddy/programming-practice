@@ -46,6 +46,35 @@ int numDecodingsDP(char *str, int len) {
   return dec[len];
 }
 
+void printOutput (char op[], int size) {
+  if (size == 0)
+    return;
+  for (int i = size - 1; i >= 0; i--)
+    printf("%c", op[i]);
+  printf(" ");
+}
+
+void printDecodings (char str[], int n, char op[], int size) {
+  if (n == 0) {
+    printOutput(op, size);
+    return;
+  }
+
+  if (str[n-1] >= '1' && str[n-1] <= '9') {
+    op[size] = (str[n-1] - '0') + 'a' - 1;
+    printDecodings(str, n-1, op, size + 1);
+  }
+
+  if (n > 1) {
+    if (str[n-2] == '1' && str[n-1] >= '0' && str[n-1] <= '9' ||
+        str[n-2] == '2' && str[n-1] >= '0' && str[n-1] <= '6') {
+      int num = (str[n-2] - '0') * 10 + (str[n-1] - '0');
+      op[size] = num + 'a' - 1;
+      printDecodings(str, n-2, op, size + 1);
+    }
+  }
+}
+
 int main(int argc, char *argv[])
 {
   if (argc < 2) {
@@ -56,7 +85,13 @@ int main(int argc, char *argv[])
   char *str = argv[1];
   int len = strlen(str);
 
-  cout << numDecodingsRec(str, len) << endl;
-  cout << numDecodingsDP(str, len) << endl;
+  /* cout << numDecodingsRec(str, len) << endl; */
+  /* cout << numDecodingsDP(str, len) << endl; */
+
+  char op[len];
+  int size = 0;
+  printDecodings(str, len, op, size);
+  printf("\n");
+
   return 0;
 }
