@@ -1,0 +1,29 @@
+<html ng-app>
+  <head>
+    <title>Angular JS practice</title>
+    <script src="angular.min.js"></script>
+    <script src="vehicles_controller.js"></script>
+  </head>
+
+  <body ng-controller="vehiclesController">
+    <h2>List of vehicles</h2>
+    <ul>
+      <li ng-repeat="vehicle in vehicles">
+        <span class="name">{{vehicle.name}}</span>
+        <span class="price">{{vehicle.price}}</span>
+        <button ng-click="remove($index)">Delete</button>
+      </li>
+    </ul>
+    <div class="add-vehicle">
+      <span>
+        Name:
+        <input ng-model="vehicle.name" ng-maxlength="10">
+      </span>
+      <span>
+        Price:
+        <input type="number" ng-model="vehicle.price">
+      </span>
+      <button ng-click="add()">Add vehicle</button>
+    </div>
+  </body>
+</html>

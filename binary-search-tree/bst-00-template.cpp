@@ -27,6 +27,10 @@ class BSTree {
     root = insertUtil(root, data);
   }
 
+  void remove (int data) {
+    root = removeUtil(root, data);
+  }
+
   void inOrder () {
     inOrderUtil(root);
     printf("\n");
@@ -49,6 +53,27 @@ class BSTree {
       r->right = insertUtil(r->right, data);
 
     return r;
+  }
+
+  node *removeUtil (node *r, int data) {
+    // base case
+    if (root == NULL)
+      return root;
+
+    // found the element
+    if (data == root->data) {
+      if (root->left == NULL)
+        return root->right;
+      else if (root->right == NULL)
+        return root->left;
+      else { // pulling a child one level up
+      }
+    }
+
+    else if (data < root->data)
+      root->left = removeUtil(root->left, data);
+    else
+      root->right = removeUtil(root->right, data);
   }
 
   void inOrderUtil (node *r) {
